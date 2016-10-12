@@ -1,0 +1,42 @@
+<div class="post">
+  <div class="post-heading">
+    <div class="post-title">
+      <a href="/blog/{{p.key().id()}}">{{p.subject}}</a>
+    </div>
+    <div style="font-size:10px; text-align:right;" class="post-user">
+      {{p.username}}
+    </div>
+    <br>
+    
+  </div>
+
+  <div class="post-content">
+    {{p._render_text | safe}}
+  </div>
+  <div style="text-align:right;" class="post-date">
+      {{p.created.strftime("%b %d, %Y")}}
+  </div>
+  {% if user.username == p.username %}
+     <input type="button" id="delete-warning" value="Delete">
+     <script type="text/javascript">
+       $(document).ready(function(){
+          $('#delete-warning').click(function(){
+            confirmation = confirm("Are you sure you want to delete?");
+            console.log(confirmation)
+            if (confirmation){
+                $.ajax({
+                  url:'/delete',
+                  type: 'POST',
+                  data: JSON.stringify({"post":"{{p.key().id()}}" }),
+                  dataType: 'json'
+
+                 });
+            }
+          });
+          
+       });
+
+     </script>
+  {% endif %}
+</div>
+<br><br>

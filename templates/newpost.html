@@ -1,0 +1,17 @@
+{%extends "blog-base.html" %}
+
+{% block content %}
+<a href="/blog">Back to the Blog</a>
+<form method="post">
+  		<label>
+  			<div> title </div>
+  			<input type="text" name="subject" value="{{title}}">
+  		</label>
+  		<label>
+  			<div> art </div>
+  			<textarea name="content" >{{content}}</textarea>
+  		</label>
+  		<div class="error">{{error}}</div>
+  		<input type="submit">
+  	</form> 
+{% endblock %}
