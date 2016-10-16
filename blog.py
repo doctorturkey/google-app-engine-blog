@@ -172,8 +172,8 @@ class Delete(Handler):
   def post(self):
     data = json.loads(self.request.body)
     # data.post.delete()
-    print data['post']
-    # BlogPosts.get_by_id(int(data['post'])).delete()
+    post_id = int(data['post'])
+    BlogPosts.get_by_id(post_id).delete()
     self.redirect("/blog")
 
 

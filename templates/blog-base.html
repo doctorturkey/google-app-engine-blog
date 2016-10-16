@@ -50,6 +50,28 @@
   	   	font-size: 17px;
   	   }
   	</style>
+    <script type="text/javascript">
+       $(document).ready(function(){
+          $('.delete-warning').on('click',function(e){
+            e.preventDefault();
+            var id = $(this).data('id');
+            confirmation = confirm("Are you sure you want to delete?");
+            console.log(confirmation);
+            if (confirmation){
+                $.ajax({
+                  url:'/delete',
+                  type: 'POST',
+                  data: JSON.stringify({"post":id }),
+                  dataType: 'json'
+
+                 });
+                $(this).closest('.post').remove();
+            }
+          });
+          
+       });
+
+     </script>
   </head>
 
   <body>
