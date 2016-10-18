@@ -95,6 +95,7 @@ class BlogPosts(db.Model):
   created = db.DateTimeProperty(auto_now_add = True)
   username = db.TextProperty(required=True)
   last_modified = db.DateTimeProperty(auto_now = True)
+  likes = db.ListProperty(str)
 
   def render(self,user):
       self._render_text = self.content.replace('\n', '<br>')
@@ -126,7 +127,8 @@ class NewPost(Handler):
       user_id = self.read_secure_cookie("user_id")
       if subject and content and user_id:
         username = Users.get_name(user_id)
-        a = BlogPosts(subject = subject, content = content,username= username)
+        likes = []
+        a = BlogPosts(subject = subject, content = content,username= username, likes = likes)
         a.put()
         self.redirect("/blog/"+str(a.key().id()))
       else:
@@ -175,6 +177,17 @@ class Delete(Handler):
     post_id = int(data['post'])
     BlogPosts.get_by_id(post_id).delete()
     self.redirect("/blog")
+
+class Vote(Handler):
+  def post(self):
+    data = json.loads(self.request.body)
+    post_id = int(data['id'])
+    likes_test = data['likes']
+    print likes_test
+    user = Users.get_name(self.read_secure_cookie("user_id"))
+    post = BlogPosts.get_by_id(post_id)
+    post.likes.append(user)
+    post.put()
 
 
 class SignUp(Handler):
@@ -283,6 +296,7 @@ app = webapp2.WSGIApplication([
                              ('/welcome',Welcome),
                              ('/blog/?', Blog),
                              (r'/blog/([0-9]+)', SinglePost),
+                             ('/vote', Vote),
                              ('/blog/newpost',NewPost)],debug=True)
 
 

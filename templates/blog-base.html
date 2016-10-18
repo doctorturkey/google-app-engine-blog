@@ -52,7 +52,7 @@
   	</style>
     <script type="text/javascript">
        $(document).ready(function(){
-          $('.delete-warning').on('click',function(e){
+          $('.delete-warning').click(function(e){
             e.preventDefault();
             var id = $(this).data('id');
             confirmation = confirm("Are you sure you want to delete?");
@@ -67,6 +67,20 @@
                  });
                 $(this).closest('.post').remove();
             }
+          });
+
+
+          $('.upboat').click(function(){
+             var likes = $(this).data('likes');
+             var id = $(this).data('id');
+             $.ajax({
+               url:'/vote',
+               type: 'POST',
+               data: JSON.stringify({"likes":likes,"id":id}),
+               dataType: 'json'
+             });
+             console.log(likes+1)
+
           });
           
        });
