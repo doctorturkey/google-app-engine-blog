@@ -68,10 +68,10 @@
                 $(this).closest('.post').remove();
             }
           });
-
-
-          $('.upboat').click(function(){
-             var likes = $(this).data('likes');
+//http://stackoverflow.com/questions/16338306/data-attribute-changes-not-detected-with-jquery
+//http://stackoverflow.com/questions/6658752/click-event-doesnt-work-on-dynamically-generated-elements
+          $('.post').on('click','.upboat',function(){
+             var likes = $(this).attr('likes');
              var id = $(this).data('id');
              $.ajax({
                url:'/vote',
@@ -79,7 +79,30 @@
                data: JSON.stringify({"likes":likes,"id":id}),
                dataType: 'json'
              });
-             console.log(likes+1)
+             $(this).prop('value','Vote Down');
+             $(this).prop('class','unvote');
+             likes++;
+             $(this).attr('likes',likes);
+             $(this).closest('.post').find("div.likes").text(likes);
+
+          });
+
+          $('.post').on('click','.unvote',function(){
+             var likes = $(this).attr('likes');
+             var id = $(this).data('id');
+             $.ajax({
+               url:'/unvote',
+               type: 'POST',
+               data: JSON.stringify({"likes":likes,"id":id}),
+               dataType: 'json'
+             });
+             $(this).prop('value','Vote Up');
+             $(this).prop('class','upboat');
+             likes--;
+             $(this).attr('likes',likes);
+             $(this).closest('.post').find("div.likes").text(likes);
+             // $(this).closest(".post.likes").text(likes);
+
 
           });
           

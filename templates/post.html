@@ -16,16 +16,21 @@
   <div style="text-align:right;" class="post-date">
       {{p.created.strftime("%b %d, %Y")}}
   </div>
+  <div class="likes">{{p.likes|length}}</div>
   {% if user %}
 
      {% if user.username == p.username %}
         <input type="button" class="delete-warning" data-id="{{p.key().id()}}" value="Delete">
      {% else %}
         {% if user.username not in p.likes %}
-           <input type="button" data-id="{{p.key().id()}}" data-likes="{{p.likes|length}}" class="upboat" value="Vote Up">
+           <input type="button" data-id="{{p.key().id()}}" likes="{{p.likes|length}}" class="upboat" value="Vote Up">
+        {% else %}
+           <input type="button" data-id="{{p.key().id()}}" likes="{{p.likes|length}}" class="unvote" value="Vote Down">
         {% endif %}
+
      {% endif %}
   {% endif %}
+  
   <br><br>
 </div>
 

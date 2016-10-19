@@ -183,10 +183,19 @@ class Vote(Handler):
     data = json.loads(self.request.body)
     post_id = int(data['id'])
     likes_test = data['likes']
-    print likes_test
     user = Users.get_name(self.read_secure_cookie("user_id"))
     post = BlogPosts.get_by_id(post_id)
     post.likes.append(user)
+    post.put()
+
+class Unvote(Handler):
+  def post(self):
+    data = json.loads(self.request.body)
+    post_id = int(data['id'])
+    likes_test = data['likes']
+    user = Users.get_name(self.read_secure_cookie("user_id"))
+    post = BlogPosts.get_by_id(post_id)
+    post.likes.remove(user)
     post.put()
 
 
@@ -297,6 +306,7 @@ app = webapp2.WSGIApplication([
                              ('/blog/?', Blog),
                              (r'/blog/([0-9]+)', SinglePost),
                              ('/vote', Vote),
+                             ('/unvote', Unvote),
                              ('/blog/newpost',NewPost)],debug=True)
 
 
@@ -313,8 +323,7 @@ app = webapp2.WSGIApplication([
 # Why can't I remember this
 # Attribute?
 
-
-
+# $(this).text("<input type='button' data-id='{{p.key().id()}}' data-likes='{{p.likes|length}}' class='upboat' value='Vote Up'>")
 
 
 
