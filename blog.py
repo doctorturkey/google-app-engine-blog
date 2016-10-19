@@ -130,7 +130,7 @@ class NewPost(Handler):
         likes = []
         a = BlogPosts(subject = subject, content = content,username= username, likes = likes)
         a.put()
-        self.redirect("/blog/"+str(a.key().id()))
+        self.redirect("/"+str(a.key().id()))
       else:
         error = "come on idiot"
         self.render("newpost.html",error=error,title=subject,content=content,user = self.user)
@@ -176,7 +176,7 @@ class Delete(Handler):
     # data.post.delete()
     post_id = int(data['post'])
     BlogPosts.get_by_id(post_id).delete()
-    self.redirect("/blog")
+    self.redirect("/")
 
 class Vote(Handler):
   def post(self):
@@ -198,6 +198,31 @@ class Unvote(Handler):
     post.likes.remove(user)
     post.put()
 
+class Edit(Handler):
+  def get(self,post_id):
+      post = BlogPosts.get_by_id(int(post_id))
+      self.render("editpost.html",subject=post.subject,content=post.content,id=post_id,user = self.user)
+  def post(self,post_id):
+      subject = self.request.get("subject")
+      content = self.request.get("content")
+      post_id = self.request.get("id")
+      user_id = self.read_secure_cookie("user_id")
+      if subject and content and user_id and post_id:
+        p = BlogPosts.get_by_id(int(post_id))
+        username = Users.get_name(int(user_id))
+        if p.username == username:
+          p.subject = subject
+          p.content = content
+          p.put()
+          self.redirect("/"+str(p.key().id()))
+      else:
+        error = "come on idiot"
+        print subject
+        print content
+        print user_id
+        print self.user
+        print post_id
+        self.render("editpost.html",error=error,id=post_id,subject=subject,content=content,user = self.user)
 
 class SignUp(Handler):
   def get(self):
@@ -259,7 +284,7 @@ class SignUp(Handler):
         user = Users.register(username,password)
         user.put()
         self.login(user)
-        self.redirect('/blog')
+        self.redirect('/')
 
 class LogIn(Handler):
   def get(self):
@@ -275,14 +300,14 @@ class LogIn(Handler):
     else:
       self.response.headers['Content-Type'] = 'text/plain'
       self.login(user)
-      self.redirect('/blog')
+      self.redirect('/')
 
 
 class LogOut(Handler):
   def get(self):
     self.response.headers['Content-Type'] = 'text/plain'
     self.logout()
-    self.redirect("/blog")
+    self.redirect("/")
 
 class Welcome(Handler):
   def get(self):
@@ -303,11 +328,12 @@ app = webapp2.WSGIApplication([
                              ('/signup',SignUp),
                              ('/logout',LogOut),
                              ('/welcome',Welcome),
-                             ('/blog/?', Blog),
-                             (r'/blog/([0-9]+)', SinglePost),
+                             ('/?', Blog),
+                             (r'/([0-9]+)', SinglePost),
+                             ('/edit/([0-9]+)', Edit),
                              ('/vote', Vote),
                              ('/unvote', Unvote),
-                             ('/blog/newpost',NewPost)],debug=True)
+                             ('/newpost',NewPost)],debug=True)
 
 
 # When creating blog posts, input the user into the Posts model
@@ -323,7 +349,6 @@ app = webapp2.WSGIApplication([
 # Why can't I remember this
 # Attribute?
 
-# $(this).text("<input type='button' data-id='{{p.key().id()}}' data-likes='{{p.likes|length}}' class='upboat' value='Vote Up'>")
 
 
 

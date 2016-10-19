@@ -1,7 +1,7 @@
 <div class="post">
   <div class="post-heading">
     <div class="post-title">
-      <a href="/blog/{{p.key().id()}}">{{p.subject}}</a>
+      <a href="/{{p.key().id()}}">{{p.subject}}</a>
     </div>
     <div style="font-size:10px; text-align:right;" class="post-user">
       {{p.username}}
@@ -21,6 +21,7 @@
 
      {% if user.username == p.username %}
         <input type="button" class="delete-warning" data-id="{{p.key().id()}}" value="Delete">
+        <a href="/edit/{{p.key().id()}}" class="edit">Edit</a>
      {% else %}
         {% if user.username not in p.likes %}
            <input type="button" data-id="{{p.key().id()}}" likes="{{p.likes|length}}" class="upboat" value="Vote Up">
@@ -30,7 +31,7 @@
 
      {% endif %}
   {% endif %}
-  
+
   <br><br>
 </div>
 

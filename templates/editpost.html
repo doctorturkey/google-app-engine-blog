@@ -2,7 +2,7 @@
 
 {% block content %}
 <a href="/">Back to the Blog</a>
-<form method="post">
+   <form method="post">
   		<label>
   			<div> title </div>
   			<input type="text" name="subject" value="{{subject}}">
@@ -12,6 +12,7 @@
   			<textarea name="content" >{{content}}</textarea>
   		</label>
   		<div class="error">{{error}}</div>
+      <input type="hidden" name= "id" value="{{id}}">
   		<input type="submit">
-  	</form> 
+  </form> 
 {% endblock %}
