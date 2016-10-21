@@ -132,15 +132,16 @@
   </head>
 
   <body>
+  <div >
+    <a href="/">Home</a>
     {% if user %}
     <a href="/logout">Log out</a>
     {% else %}
     <a href="/login">Log in</a>
-    <br>
     <a href="/signup">Sign up</a>
     {% endif %}
+  </div>
     {%block content%}
       {%endblock%}
-
   </body>
 </html>

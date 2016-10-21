@@ -1,7 +1,7 @@
 {%extends "blog-base.html" %}
 
 {% block content %}
-<a href="/">Back to the Blog</a>
+
    <form method="post">
   		<label>
   			<div> title </div>
@@ -15,4 +15,5 @@
       <input type="hidden" name= "id" value="{{id}}">
   		<input type="submit">
   </form> 
+  <a href="/{{id}}">Cancel</a>
 {% endblock %}

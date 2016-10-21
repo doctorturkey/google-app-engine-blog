@@ -4,7 +4,6 @@
     {% if user %}
     <p>Current user is {{user.username}}</p>
     {% endif %}
-    <a href="/">Back to the main page</a>
   	{{ blog.render(user) | safe}}
 
  {% endblock %}
