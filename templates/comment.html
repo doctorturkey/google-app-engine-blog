@@ -1,0 +1,29 @@
+<div class="comment" style="background-color:gray;margin-top:10px;border-radius:5px;">
+  <div class="post-heading">
+    <div style="font-size:10px; text-align:right;" class="post-user">
+      {{c.username}}
+    </div>
+    <br>
+    
+  </div>
+
+  <div class="post-content">
+    {{c._render_text | safe}}
+  </div>
+  <div style="text-align:right;" class="post-date">
+      {{c.created.strftime("%b %d, %Y")}}
+  </div>
+  {% if user %}
+
+     {% if user.username == c.username %}
+        <input type="button" class="delete-comment" commentid="{{c.key().id()}}" value="Delete">
+        <a href="/edit-comment/{{c.key().id()}}" class="edit">Edit</a>
+
+     {% endif %}
+
+  {% endif %}
+
+  <br><br>
+</div>
+
+

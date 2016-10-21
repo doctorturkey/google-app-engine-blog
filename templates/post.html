@@ -30,7 +30,12 @@
         {% endif %}
 
      {% endif %}
+     <a href="/comment/{{p.key().id()}}">Submit a Comment</a>
+
   {% endif %}
+  {% for comment in comments %}
+     {{comment.render(user) | safe}}
+  {% endfor %}
 
   <br><br>
 </div>

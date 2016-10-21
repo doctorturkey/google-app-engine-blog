@@ -99,7 +99,8 @@ class BlogPosts(db.Model):
 
   def render(self,user):
       self._render_text = self.content.replace('\n', '<br>')
-      return render_str("post.html", p = self, user = user)
+      comments = db.GqlQuery("select * from Comments where post_id = :1",self.key().id())
+      return render_str("post.html", p = self, user = user,comments =comments)
 
 
 
@@ -170,12 +171,65 @@ class Users(db.Model):
       if u and valid_pw(name, pw, u.password):
           return u
 
+class Comments(db.Model):
+  content = db.TextProperty(required=True)
+  post_id = db.IntegerProperty(required=True)
+  username = db.StringProperty(required=True)
+  created = db.DateTimeProperty(auto_now_add = True)
+  last_modified = db.DateTimeProperty(auto_now = True)
+  def render(self,user):
+     self._render_text = self.content.replace('\n', '<br>')
+     return render_str('comment.html',c = self, user = user)
+
+class NewComment(Handler):
+  def get(self,post_id):
+
+      if not self.user:
+        self.redirect("/login")
+      else:
+        self.render("newcomment.html",user = self.user,post_id=post_id)
+  def post(self,post_id):
+      content = self.request.get("content")
+      user_id = self.read_secure_cookie("user_id")
+      if content and user_id:
+        username = Users.get_name(user_id)
+        a = Comments(content = content,username= username, post_id=int(post_id))
+        a.put()
+        self.redirect("/")
+      else:
+        error = "come on idiot"
+        self.render("newcomment.html",error=error,content=content,user = self.user)
+
+class EditComment(Handler):
+  def get(self,comment_id):
+      comment = Comments.get_by_id(int(comment_id))
+      self.render("newcomment.html",content = comment.content)
+  def post(self,comment_id):
+      content = self.request.get("content")
+      user_id = self.read_secure_cookie("user_id")
+      if content and user_id:
+        a = Comments.get_by_id(int(comment_id))
+        a.content = content
+        a.put()
+        self.redirect("/")
+      else:
+        error = "come on idiot"
+        self.render("newcomment.html",error=error,content=content)
+
 class Delete(Handler):
   def post(self):
     data = json.loads(self.request.body)
     # data.post.delete()
     post_id = int(data['post'])
     BlogPosts.get_by_id(post_id).delete()
+    self.redirect("/")
+
+class DeleteComment(Handler):
+  def post(self):
+    data = json.loads(self.request.body)
+    # data.post.delete()
+    comment_id = int(data['comment'])
+    Comments.get_by_id(comment_id).delete()
     self.redirect("/")
 
 class Vote(Handler):
@@ -198,6 +252,9 @@ class Unvote(Handler):
     post.likes.remove(user)
     post.put()
 
+
+# TODO: Sending post_id as a cookie that is secure.
+
 class Edit(Handler):
   def get(self,post_id):
       post = BlogPosts.get_by_id(int(post_id))
@@ -217,11 +274,6 @@ class Edit(Handler):
           self.redirect("/"+str(p.key().id()))
       else:
         error = "come on idiot"
-        print subject
-        print content
-        print user_id
-        print self.user
-        print post_id
         self.render("editpost.html",error=error,id=post_id,subject=subject,content=content,user = self.user)
 
 class SignUp(Handler):
@@ -325,12 +377,15 @@ class Welcome(Handler):
 app = webapp2.WSGIApplication([
                              ('/login',LogIn),
                              ('/delete',Delete),
+                             ('/delete-comment',DeleteComment),
                              ('/signup',SignUp),
                              ('/logout',LogOut),
                              ('/welcome',Welcome),
+                             ('/comment/([0-9]+)',NewComment),
                              ('/?', Blog),
                              (r'/([0-9]+)', SinglePost),
                              ('/edit/([0-9]+)', Edit),
+                             ('/edit-comment/([0-9]+)', EditComment),
                              ('/vote', Vote),
                              ('/unvote', Unvote),
                              ('/newpost',NewPost)],debug=True)
