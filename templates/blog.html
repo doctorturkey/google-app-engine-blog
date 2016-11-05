@@ -3,14 +3,17 @@
 {% block content %}
 
   	<h1>Blog</h1>
+    <!-- If there's a user logged in, their name will be
+     displayed at the top. They will also be able to submit a post -->
     {% if user %}
   	   <p>{{user.username}} is the current user</p>
   	   <a href="/newpost">Submit a Post</a>
   	{% endif %}
   	
   	<hr>
+    <!-- Lists all the blog posts -->
   	{% for blog in blog_posts %}
   	  {{blog.render(user) | safe}}
   	{% endfor %}
 
- {% endblock %}
+{% endblock %}
