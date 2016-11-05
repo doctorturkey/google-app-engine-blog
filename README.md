@@ -1,8 +1,9 @@
 # UDACITY MULTI-USER BLOG
 
 Hello! Welcome to this blog. The last bastion of free speech on the internet.
-You want a website that isn't moderated? Try this one out! 
-Just kidding, don't fuck this website up.
+You want a website that isn't moderated? 
+Try this one out! 
+Just kidding, don't fuck this website up. I mean speak your mind but don't be a dick.
 
 If you want to just see what this website can do, go to http://polar-caldron-147103.appspot.com/
 
