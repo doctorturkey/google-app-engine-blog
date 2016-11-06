@@ -230,15 +230,26 @@ class NewComment(Handler):
 class EditComment(Handler):
   def get(self,comment_id):
       comment = Comments.get_by_id(int(comment_id))
-      self.render("newcomment.html",content = comment.content)
+      if comment:
+         if comment.username == self.user.username:
+            self.render("newcomment.html",content = comment.content)
+         else:
+            self.redirect("/")
+      else:
+         self.redirect("/")
   def post(self,comment_id):
       content = self.request.get("content")
       user_id = self.read_secure_cookie("user_id")
       if content and user_id:
         a = Comments.get_by_id(int(comment_id))
-        a.content = content
-        a.put()
-        self.redirect("/")
+        if a:
+           if a.username == self.user.username:
+              a.content = content
+              a.put()
+              self.redirect("/")
+        else:
+           error = "that comment doesn't exist"
+           self.render("newcomment.html",error=error,content=content)
       else:
         error = "come on idiot"
         self.render("newcomment.html",error=error,content=content)
@@ -249,7 +260,9 @@ class Delete(Handler):
     data = json.loads(self.request.body)
     # data.post.delete()
     post_id = int(data['post'])
-    BlogPosts.get_by_id(post_id).delete()
+    post = BlogPosts.get_by_id(post_id)
+    if post:
+      post.delete()
     self.redirect("/")
 
 # Handler for deleting a comment. Similar in design to deleting a post
@@ -258,7 +271,9 @@ class DeleteComment(Handler):
     data = json.loads(self.request.body)
     # data.post.delete()
     comment_id = int(data['comment'])
-    Comments.get_by_id(comment_id).delete()
+    comment = Comments.get_by_id(comment_id)
+    if comment:
+      comment.delete()
     self.redirect("/")
 
 # Handler for upvoting something
