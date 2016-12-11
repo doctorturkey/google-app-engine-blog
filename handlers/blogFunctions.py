@@ -57,7 +57,7 @@ class Delete(Handler):
     
 
     if post:
-      if Users.get_name(self.user) == post.username:
+      if self.user.username == post.username:
          post.delete()
     self.redirect("/")
 
