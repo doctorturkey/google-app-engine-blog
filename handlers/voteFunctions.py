@@ -26,8 +26,9 @@ class Vote(Handler):
     likes_test = data['likes']
     user = Users.get_name(self.read_secure_cookie("user_id"))
     post = BlogPosts.get_by_id(post_id)
-    post.likes.append(user)
-    post.put()
+    if post.username != user and user not in post.likes:
+        post.likes.append(user)
+        post.put()
 
 # Handler for taking away a vote
 # Similar in design to the upvoting
@@ -38,5 +39,6 @@ class Unvote(Handler):
     likes_test = data['likes']
     user = Users.get_name(self.read_secure_cookie("user_id"))
     post = BlogPosts.get_by_id(post_id)
-    post.likes.remove(user)
-    post.put()
+    if user in post.likes and post.username!=user:
+        post.likes.remove(user)
+        post.put()

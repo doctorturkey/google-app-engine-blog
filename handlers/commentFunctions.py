@@ -72,6 +72,7 @@ class DeleteComment(Handler):
     comment_id = int(data['comment'])
     comment = Comments.get_by_id(comment_id)
     if comment:
-      comment.delete()
+      if Comments.get_name(self.user) == comment.username:
+        comment.delete()
     self.redirect("/")
 

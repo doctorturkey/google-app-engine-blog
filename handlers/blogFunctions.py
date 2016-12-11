@@ -50,11 +50,15 @@ class SinglePost(Handler):
 class Delete(Handler):
   def post(self):
     data = json.loads(self.request.body)
+
     # data.post.delete()
     post_id = int(data['post'])
     post = BlogPosts.get_by_id(post_id)
+    
+
     if post:
-      post.delete()
+      if Users.get_name(self.user) == post.username:
+         post.delete()
     self.redirect("/")
 
 # TODO: Sending post_id as a cookie that is secure.
