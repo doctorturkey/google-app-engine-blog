@@ -37,19 +37,19 @@ class Blog(Handler):
 
 
 app = webapp2.WSGIApplication([
-                             ('/login',LogIn),
-                             ('/delete',Delete),
-                             ('/delete-comment',DeleteComment),
-                             ('/signup',SignUp),
-                             ('/logout',LogOut),
-                             ('/comment/([0-9]+)',NewComment),
+                             ('/login/?',LogIn),
+                             ('/delete/?',Delete),
+                             ('/delete-comment/?',DeleteComment),
+                             ('/signup/?',SignUp),
+                             ('/logout/?',LogOut),
+                             ('/comment/([0-9]+)/?',NewComment),
                              ('/?', Blog),
-                             (r'/([0-9]+)', SinglePost),
-                             ('/edit/([0-9]+)', Edit),
-                             ('/edit-comment/([0-9]+)', EditComment),
-                             ('/vote', Vote),
-                             ('/unvote', Unvote),
-                             ('/newpost',NewPost)],debug=True)
+                             (r'/([0-9]+)/?', SinglePost),
+                             ('/edit/([0-9]+)/?', Edit),
+                             ('/edit-comment/([0-9]+)/?', EditComment),
+                             ('/vote/?', Vote),
+                             ('/unvote/?', Unvote),
+                             ('/newpost/?',NewPost)],debug=True)
 
 
 # When creating blog posts, input the user into the Posts model
