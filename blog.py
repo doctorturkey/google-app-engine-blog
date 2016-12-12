@@ -25,12 +25,16 @@ from handlers.userFunctions import LogIn, LogOut, SignUp
 # Class that renders the blog front page
 class Blog(Handler):
    def render_front(self,title="",content="",error=""):
-      # Helper for deleting all blog posts if you added a new attribute to the blog posts class
+      # Helper for deleting all blog posts 
+      # if you added a new attribute to the blog posts class
       # posts = BlogPosts.all()
       # for post in posts:
       #   post.delete()
       blog_posts = db.GqlQuery("select * from BlogPosts order by created DESC")
-      self.render("blog.html",error=error,blog_posts = blog_posts,user = self.user)
+      self.render("blog.html",
+                  error=error,
+                  blog_posts=blog_posts,
+                  user=self.user)
    def get(self):
       self.render_front()
 

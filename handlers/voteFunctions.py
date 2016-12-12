@@ -18,7 +18,8 @@ from models.users import Users
 
 # Handler for upvoting something
 # adds the current user to the list of users that like the post
-# This was in the hopes of someday incorporating a "Users who likes this:" feature
+# This was in the hopes of someday 
+# incorporating a "Users who likes this:" feature
 class Vote(Handler):
   def post(self):
     data = json.loads(self.request.body)

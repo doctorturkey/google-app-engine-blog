@@ -14,6 +14,11 @@ class BlogPosts(db.Model):
   likes = db.ListProperty(str)
 
   def render(self,user):
-      self._render_text = self.content.replace('\n', '<br>') # allows for users to do new lines in their blog posts
-      comments = db.GqlQuery("select * from Comments where post_id = :1",self.key().id())
-      return blog.render_str("post.html", p = self, user = user,comments =comments)
+      # allows for users to do new lines in their blog posts
+      self._render_text = self.content.replace('\n', '<br>') 
+      comments = db.GqlQuery("select * from Comments where post_id = :1",
+                             self.key().id())
+      return blog.render_str("post.html", 
+                              p=self, 
+                              user=user,
+                              comments=comments)

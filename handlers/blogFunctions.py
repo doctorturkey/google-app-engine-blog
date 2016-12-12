@@ -31,12 +31,19 @@ class NewPost(Handler):
       if subject and content and user_id:
         username = Users.get_name(user_id)
         likes = []
-        a = BlogPosts(subject = subject, content = content, username= username, likes = likes)
+        a = BlogPosts(subject=subject, 
+                      content=content, 
+                      username= username, 
+                      likes = likes)
         a.put()
         self.redirect("/"+str(a.key().id()))
       else:
         error = "come on idiot"
-        self.render("newpost.html",error=error,title=subject,content=content,user = self.user)
+        self.render("newpost.html",
+                     error=error,
+                     title=subject,
+                     content=content,
+                     user=self.user)
 
 # Class that renders the page of a single blog post
 class SinglePost(Handler):
@@ -46,7 +53,8 @@ class SinglePost(Handler):
       print "Uh oh"
     self.render("single_blog.html",blog=post,user = self.user)
 
-# Handler for deleting a post, post_id to be deleted is passed through ajax as json
+# Handler for deleting a post, 
+# post_id to be deleted is passed through ajax as json
 class Delete(Handler):
   def post(self):
     data = json.loads(self.request.body)
@@ -66,11 +74,17 @@ class Delete(Handler):
 # The class that allows for users to edit their posts
 class Edit(Handler):
   def get(self,post_id):
-      # Grabs the post_id from the url, then populates the page with the users data to edit
+      # Grabs the post_id from the url, 
+      # then populates the page with the users data to edit
       post = BlogPosts.get_by_id(int(post_id))
-      self.render("editpost.html",subject=post.subject,content=post.content,id=post_id,user = self.user)
+      self.render("editpost.html",
+                  subject=post.subject,
+                  content=post.content,
+                  id=post_id,
+                  user=self.user)
   def post(self,post_id):
-      # Checks to make sure that the correct user is editing the data, and that they have the required fields
+      # Checks to make sure that the correct user is editing the data, 
+      # and that they have the required fields
       subject = self.request.get("subject")
       content = self.request.get("content")
       post_id = self.request.get("id")
@@ -85,5 +99,10 @@ class Edit(Handler):
           self.redirect("/"+str(p.key().id()))
       else:
         error = "come on idiot"
-        self.render("editpost.html",error=error,id=post_id,subject=subject,content=content,user = self.user)
+        self.render("editpost.html",
+                     error=error,
+                     id=post_id,
+                     subject=subject,
+                     content=content,
+                     user = self.user)
 

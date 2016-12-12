@@ -15,7 +15,8 @@ class Users(db.Model):
 
   @classmethod
   def by_name(cls, username):
-      u = db.GqlQuery("select * from Users where username=:1",username).get()
+      u = db.GqlQuery("select * from Users where username=:1",
+                      username).get()
       return u
   @classmethod
   def get_name(cls, user_id):

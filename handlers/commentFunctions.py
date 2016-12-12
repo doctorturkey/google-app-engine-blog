@@ -28,12 +28,16 @@ class NewComment(Handler):
       user_id = self.read_secure_cookie("user_id")
       if content and user_id:
         username = Users.get_name(user_id)
-        a = Comments(content = content,username= username, post_id=int(post_id))
+        a = Comments(content=content,
+                     username=username, 
+                     post_id=int(post_id))
         a.put()
         self.redirect("/")
       else:
         error = "come on idiot"
-        self.render("newcomment.html",error=error,content=content,user = self.user)
+        self.render("newcomment.html",error=error,
+                                      content=content,
+                                      user = self.user)
 
  # Handler for editing a comment. Similar rules as the other editor classes
 class EditComment(Handler):

@@ -17,7 +17,8 @@ from models.users import Users
 # the object for the templates directory
 template_dir = os.path.join(os.path.dirname(__file__), '../templates')
 # loads up the jinja environment, which is what we'll be using for templating
-jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),autoescape=True)
+jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir),
+                               autoescape=True)
 # checks a valid username
 
 
@@ -26,7 +27,8 @@ def render_str(template, **params):
     return t.render(params)
 
 # Our base handler class, will be inheritied a lot
-# Provides everything needed to render the page with the jinja templating engine
+# Provides everything needed to render the page 
+# with the jinja templating engine
 class Handler(webapp2.RequestHandler):
    def write(self, *a, **kw):
       self.response.out.write(*a, **kw)
