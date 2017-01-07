@@ -10,7 +10,7 @@ import hmac
 import json
 import helpers
 
-SECRET = "hello there"
+SECRET = "super secret secret"
 
 # Makes a salt of 5 letters made for each password
 def make_salt():
