@@ -56,18 +56,6 @@ app = webapp2.WSGIApplication([
                              ('/newpost/?',NewPost)],debug=True)
 
 
-# When creating blog posts, input the user into the Posts model
-# Figure out what the word for aspect of a database is called
-# Row? Column?
-# Field!! Holy shit it's field. Glad we found that out
-# So yeah, make the user_id a field of the Posts model.
-# Whenever we submit a blog, we grab the user_id and put it into the record for that blog
-
-# Is the wording right?
-# Fuck i did so bad in databases
-# Maybe the word I was thinking of was members?
-# Why can't I remember this
-# Attribute?
 
 
 
